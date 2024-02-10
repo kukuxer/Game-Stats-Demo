@@ -26,13 +26,20 @@ public class MainController {
     }
 
     @PostMapping("/list")
-    public String list(Model model, @RequestParam("name") String name, @RequestParam("winOrLose") String result){
+    public String list(Model model, @RequestParam(value = "name", required = false) String name, @RequestParam(value = "winOrLose", required = false) String result){
 
-//        List<Player> players = playerService.findAllByName(name);
+        List<Player> players = playerService.findAll();
 
-        List<Player> players = playerService.findAllByNameAndResult(name, result);
+        if(("Everything".equals(result)) && ("Everyone".equals(name))){
+            players = playerService.findAll();
+        }else if("Everything".equals(result)){
+            players = playerService.findAllByName(name);
+        }else if("Everyone".equals(name)){
+            players = playerService.findAllByResult(result);
+        }else{
+            players = playerService.findAllByNameAndResult(name, result);
+        }
 
-//        List<Player> players = playerService.findAll();
 
         model.addAttribute("players", players);
 
