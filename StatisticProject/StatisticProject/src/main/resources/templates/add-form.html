@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">>
+<head>
+    <meta charset="UTF-8">
+    <title>Add someone</title>
+    <style>
+
+        .errors{
+            color:red;
+        }
+
+    </style>
+</head>
+<body>
+
+<h3>Add Game</h3>
+<hr>
+
+<form action="#" th:action="@{/save}" method="POST">
+    <p>
+        <label for="a">Person's name</label>
+<!--        <input id="a" type="text" th:field="${player.person}" placeholder="Person">-->
+        <select id="a" th:field="${player.person}">
+            <option th:value="Bahdan" th:text="1"></option>
+            <option th:value="Junya" th:text="2"></option>
+        </select>
+    </p>
+    <p>
+        <label for="b">Win or Lose</label>
+<!--        <input id="b" type="text" th:field="${player.winOrLose}" placeholder="W/L">-->
+        <select id="b" th:field="${player.winOrLose}">
+            <option th:value="W" th:text="W"></option>
+            <option th:value="L" th:text="L"></option>
+        </select>
+    </p>
+    <p>
+        <label for="c">Score</label>
+        <input id="c" type="number" th:field="${player.score}" placeholder="score">
+    </p>
+    <p>
+        <label for="d">Date</label>
+        <input id="d" type="date" th:field="${player.date}" placeholder="date">
+    </p>
+
+    <button type="submit">Lol Lmao</button>
+
+    <hr>
+    <a href="home">home</a>
+
+</form>
+
+</body>
+</html>
