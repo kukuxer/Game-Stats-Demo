@@ -19,7 +19,7 @@
 <form action="#" th:action="@{/save}" method="POST">
     <p>
         <label for="a">Person's name</label>
-<!--        <input id="a" type="text" th:field="${game.person}" placeholder="Person">-->
+        <!--        <input id="a" type="text" th:field="${game.person}" placeholder="Person">-->
         <select id="a" th:field="${game.person}">
             <option th:value="Bahdan" th:text="Bahdan"></option>
             <option th:value="Junya" th:text="Junya"></option>
@@ -35,7 +35,7 @@
     </p>
     <p>
         <label for="b">Win or Lose</label>
-<!--        <input id="b" type="text" th:field="${game.winOrLose}" placeholder="W/L">-->
+        <!--        <input id="b" type="text" th:field="${game.winOrLose}" placeholder="W/L">-->
         <select id="b" th:field="${game.winOrLose}">
             <option th:value="W" th:text="W"></option>
             <option th:value="L" th:text="L"></option>
