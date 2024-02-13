@@ -12,15 +12,27 @@ Player/s: <a th:text="${player}"></a>
 Result: <a th:text="${result}"></a>
 <br>
 <p th:if="${isEverything == false}">
-    My Score: <a th:text="${scoreList}"></a>
+    My Games: <a th:text="${scoreList}"></a>
     <br>
-    Opponent's Score: <a th:text="${opponentsScoreList}"></a>
+    Opponent's Games: <a th:text="${opponentsScoreList}"></a>
     <br>
-    All Scores: <a th:text="${allScore}"></a>
+    All Games: <a th:text="${allScore}"></a>
+    <br>
+    Win rate by games: <a th:text="${scoreList} / ${allScore} * 100"></a>
+    <br>
+    Win rate by sets: <a th:text="${winAmount} / ${gamesAmount} * 100"></a>
 </p>
 <p th:if="${isEverything == true}">
     All Scores: <a th:text="${scoreList}"></a>
 </p>
+
+Sets have been played: <a th:text="${gamesAmount}"></a>
+<br>
+Victory Sets: <a th:text="${winAmount}"></a> Lose Sets: <a th:text="${loseAmount}"></a>
+<br>
+From: <a th:text="${date}"></a>
+to: <a th:text="${secondDate}"></a>
+
 <h3>Wow Games lol lmaooo</h3>
 <br>
 <a class="btn btn-info" th:href="@{/showFormForAdd}">Add</a>

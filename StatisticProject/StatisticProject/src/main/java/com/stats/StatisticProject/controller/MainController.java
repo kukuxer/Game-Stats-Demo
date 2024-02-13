@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 public class MainController {
@@ -71,14 +72,26 @@ public class MainController {
 
         int scoreList = 0;
         int opponentsScoreList = 0;
+        int gamesAmount = games.size();
+        int winAmount = 0;
+        int loseAmount = 0;
         for(Game game : games){
             scoreList += game.getMyScore();
             opponentsScoreList += game.getOpponentScore();
+            if(Objects.equals(game.winOrLose, "W")){
+                winAmount++;
+            }else if(Objects.equals(game.winOrLose, "L")){
+                loseAmount++;
+            }
         }
 
         int allScore = scoreList + opponentsScoreList;
 
+        model.addAttribute("winAmount", winAmount);
+        model.addAttribute("loseAmount", loseAmount);
+        model.addAttribute("gamesAmount", gamesAmount);
         model.addAttribute("date", date);
+        model.addAttribute("secondDate", secondDate);
         model.addAttribute("isEverything", everything);
         model.addAttribute("allScore", allScore);
         model.addAttribute("scoreList", scoreList);
@@ -102,6 +115,12 @@ public class MainController {
 
     @PostMapping("/save")
     public String save(@ModelAttribute("game") Game game){
+
+        if(game.getMyScore() > game.getOpponentScore()){
+            game.setWinOrLose("W");
+        }else{
+            game.setWinOrLose("L");
+        }
 
         String result = "L";
 
