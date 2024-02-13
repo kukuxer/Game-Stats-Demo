@@ -1,23 +1,22 @@
 package com.stats.StatisticProject.controller;
 
-import com.stats.StatisticProject.entity.Player;
-import com.stats.StatisticProject.service.PlayerService;
+import com.stats.StatisticProject.entity.Game;
+import com.stats.StatisticProject.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 @Controller
 public class MainController {
 
-    private PlayerService playerService;
+    private GameService gameService;
 
     @Autowired
-    public MainController(PlayerService playerService) {
-        this.playerService = playerService;
+    public MainController(GameService gameService) {
+        this.gameService = gameService;
     }
 
     @GetMapping("/home")
@@ -28,20 +27,37 @@ public class MainController {
     @PostMapping("/list")
     public String list(Model model, @RequestParam(value = "name", required = false) String name, @RequestParam(value = "winOrLose", required = false) String result){
 
-        List<Player> players = playerService.findAll();
+        List<Game> games = gameService.findAll();
+        boolean everything = false;
 
         if(("Everything".equals(result)) && ("Everyone".equals(name))){
-            players = playerService.findAll();
+            games = gameService.findAll();
+            everything = true;
         }else if("Everything".equals(result)){
-            players = playerService.findAllByName(name);
+            games = gameService.findAllByName(name);
         }else if("Everyone".equals(name)){
-            players = playerService.findAllByResult(result);
+            games = gameService.findAllByResult(result);
+            everything = true;
         }else{
-            players = playerService.findAllByNameAndResult(name, result);
+            games = gameService.findAllByNameAndResult(name, result);
         }
 
+        int scoreList = 0;
+        int opponentsScoreList = 0;
+        for(Game game : games){
+            scoreList += game.getMyScore();
+            opponentsScoreList += game.getOpponentScore();
+        }
 
-        model.addAttribute("players", players);
+        int allScore = scoreList + opponentsScoreList;
+
+        model.addAttribute("isEverything", everything);
+        model.addAttribute("allScore", allScore);
+        model.addAttribute("scoreList", scoreList);
+        model.addAttribute("opponentsScoreList", opponentsScoreList);
+        model.addAttribute("games", games);
+        model.addAttribute("player", name);
+        model.addAttribute("result", result);
 
         return "list-page";
     }
@@ -49,28 +65,37 @@ public class MainController {
     @GetMapping("/showFormForAdd")
     public String showFormForAdd(Model model){
 
-        Player player = new Player();
+        Game game = new Game();
 
-        model.addAttribute("player", player);
+        model.addAttribute("game", game);
 
         return "add-form";
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute("player") Player player){
+    public String save(@ModelAttribute("game") Game game){
 
-//        Player player1 = new Player("aboba", "win", "7:3", "today");
+        String result = "L";
 
-        playerService.save(player);
+        if(game.getWinOrLose().equals("W")){
+            result = "L";
+        }else{
+            result = "W";
+        }
+
+        Game opponentsGame = new Game(game.getOpponent(), game.getPerson(), result, game.getOpponentScore(), game.getMyScore(), game.getDate());
+
+        gameService.save(game);
+        gameService.save(opponentsGame);
 
         return "redirect:/showFormForAdd";
     }
 
     //delete
     @GetMapping("/delete")
-    public String delete(@RequestParam("playerId") Long theId){
+    public String delete(@RequestParam Long gameIdForDelete){
 
-        playerService.deleteById(theId);
+        gameService.deleteById(gameIdForDelete);
 
         return "redirect:/home";
     }

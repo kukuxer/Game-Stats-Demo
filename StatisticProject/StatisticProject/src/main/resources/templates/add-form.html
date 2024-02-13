@@ -19,27 +19,39 @@
 <form action="#" th:action="@{/save}" method="POST">
     <p>
         <label for="a">Person's name</label>
-<!--        <input id="a" type="text" th:field="${player.person}" placeholder="Person">-->
-        <select id="a" th:field="${player.person}">
-            <option th:value="Bahdan" th:text="1"></option>
-            <option th:value="Junya" th:text="2"></option>
+<!--        <input id="a" type="text" th:field="${game.person}" placeholder="Person">-->
+        <select id="a" th:field="${game.person}">
+            <option th:value="Bahdan" th:text="Bahdan"></option>
+            <option th:value="Junya" th:text="Junya"></option>
+        </select>
+    </p>
+    <p>
+        <label for="ab">Opponent's name</label>
+        <!--        <input id="a" type="text" th:field="${game.person}" placeholder="Person">-->
+        <select id="ab" th:field="${game.opponent}">
+            <option th:value="Bahdan" th:text="Bahdan"></option>
+            <option th:value="Junya" th:text="Junya"></option>
         </select>
     </p>
     <p>
         <label for="b">Win or Lose</label>
-<!--        <input id="b" type="text" th:field="${player.winOrLose}" placeholder="W/L">-->
-        <select id="b" th:field="${player.winOrLose}">
+<!--        <input id="b" type="text" th:field="${game.winOrLose}" placeholder="W/L">-->
+        <select id="b" th:field="${game.winOrLose}">
             <option th:value="W" th:text="W"></option>
             <option th:value="L" th:text="L"></option>
         </select>
     </p>
     <p>
-        <label for="c">Score</label>
-        <input id="c" type="number" th:field="${player.score}" placeholder="score">
+        <label for="c">My Score</label>
+        <input id="c" type="number" th:field="${game.myScore}" placeholder="score">
+    </p>
+    <p>
+        <label for="cd">Opponent's score</label>
+        <input id="cd" type="number" th:field="${game.opponentScore}" placeholder="score">
     </p>
     <p>
         <label for="d">Date</label>
-        <input id="d" type="date" th:field="${player.date}" placeholder="date">
+        <input id="d" type="date" th:field="${game.date}" placeholder="date">
     </p>
 
     <button type="submit">Lol Lmao</button>
