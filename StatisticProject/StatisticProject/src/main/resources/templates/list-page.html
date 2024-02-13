@@ -7,7 +7,6 @@
 </head>
 <body>
 
-<<<<<<< HEAD
 Player/s: <a th:text="${player}"></a>
 <br>
 Result: <a th:text="${result}"></a>
@@ -22,11 +21,6 @@ Result: <a th:text="${result}"></a>
 <p th:if="${isEverything == true}">
     All Scores: <a th:text="${scoreList}"></a>
 </p>
-
-<a th:text="${date}"></a>
-
-=======
->>>>>>> parent of 31d8657 (adding crud without update)
 <h3>Wow Games lol lmaooo</h3>
 <br>
 <a class="btn btn-info" th:href="@{/showFormForAdd}">Add</a>
@@ -38,18 +32,22 @@ Result: <a th:text="${result}"></a>
         <th>Name</th>
         <th>W/L</th>
         <th>Score</th>
+        <th>Opponent's Score</th>
+        <th>Opponent</th>
         <th>Date</th>
         <th>Action</th>
     </tr>
-    <tr th:each="player : ${players}">
-        <td th:text="${player.person}"></td>
-        <td th:text="${player.winOrLose}"></td>
-        <td th:text="${player.score}"></td>
-        <td th:text="${player.date}"></td>
+    <tr th:each="game : ${games}">
+        <td th:text="${game.person}"></td>
+        <td th:text="${game.winOrLose}"></td>
+        <td th:text="${game.myScore}"></td>
+        <td th:text="${game.opponentScore}"></td>
+        <td th:text="${game.opponent}"></td>
+        <td th:text="${game.date}"></td>
         <td>
-            <a class="btn btn-danger" th:href="@{/delete(playerId=${player.id})}">Delete</a>
+            <a class="btn btn-danger" th:href="@{/delete(gameIdForDelete=${game.id})}">Delete</a>
 
-            <a  class="btn btn-info">Update</a>
+            <a  class="btn btn-info" th:href="@{/showFormForUpdate(gameId=${game.id})}">Update</a>
         </td>
     </tr>
 </table>

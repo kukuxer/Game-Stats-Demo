@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -26,49 +25,22 @@ public class MainController {
     }
 
     @PostMapping("/list")
-    public String list(Model model, @RequestParam(value = "name", required = false) String name,
-                       @RequestParam(value = "winOrLose", required = false) String result,
-                       @RequestParam(value = "date", required = false) String date,
-                       @RequestParam(value = "isDate", required = false) String isDate,
-                       @RequestParam(value = "secondDate", required = false) String secondDate,
-                       @RequestParam(value = "isSecondDate", required = false) String isSecondDate){
+    public String list(Model model, @RequestParam(value = "name", required = false) String name, @RequestParam(value = "winOrLose", required = false) String result){
 
         List<Game> games = gameService.findAll();
         boolean everything = false;
 
-        if(isDate.equals("false")){
-            if(("Everything".equals(result)) && ("Everyone".equals(name))){
-                games = gameService.findAll();
-                everything = true;
-            }else if("Everything".equals(result)){
-                games = gameService.findAllByName(name);
-            }else if("Everyone".equals(name)){
-                games = gameService.findAllByResult(result);
-                everything = true;
-            }else{
-                games = gameService.findAllByNameAndResult(name, result);
-            }
+        if(("Everything".equals(result)) && ("Everyone".equals(name))){
+            games = gameService.findAll();
+            everything = true;
+        }else if("Everything".equals(result)){
+            games = gameService.findAllByName(name);
+        }else if("Everyone".equals(name)){
+            games = gameService.findAllByResult(result);
+            everything = true;
+        }else{
+            games = gameService.findAllByNameAndResult(name, result);
         }
-//
-//        if(isDate.equals("true")){
-//            String tempDate;
-//            if(isSecondDate.equals("yes")){
-//                tempDate = secondDate;
-//            }else{
-//                tempDate = date;
-//            }
-//            if(("Everything".equals(result)) && ("Everyone".equals(name))){
-//                games = gameService.findByDateBetween(date, tempDate);
-//                everything = true;
-//            }else if("Everything".equals(result)){
-//                games = gameService.findAllByNameByDateBetween(name, date, tempDate);
-//            }else if("Everyone".equals(name)){
-//                games = gameService.findAllByResult(result);
-//                everything = true;
-//            }else{
-//                games = gameService.findAllByNameAndResult(name, result);
-//            }
-//        }
 
         int scoreList = 0;
         int opponentsScoreList = 0;
@@ -79,7 +51,6 @@ public class MainController {
 
         int allScore = scoreList + opponentsScoreList;
 
-        model.addAttribute("date", date);
         model.addAttribute("isEverything", everything);
         model.addAttribute("allScore", allScore);
         model.addAttribute("scoreList", scoreList);
