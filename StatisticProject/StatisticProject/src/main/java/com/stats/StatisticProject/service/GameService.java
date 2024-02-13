@@ -37,6 +37,15 @@ public class GameService {
     public List<Game> findByDateBetween(String startDate, String endDate){
         return gameRepository.findByDateBetween(startDate, endDate);
     }
+    public List<Game> findAllByNameByDateBetween(String name, String startDate, String endDate){
+        return gameRepository.findAllByNameByDateBetween(name, startDate, endDate);
+    }
+    public List<Game> findAllByResultByDateBetween(String result, String startDate, String endDate){
+        return gameRepository.findAllByResultByDateBetween(result, startDate, endDate);
+    }
+    public List<Game> findAllByNameAndResultByDate(String name, String result, String startDate, String endDate){
+        return gameRepository.findAllByNameAndResultByDateBetween(name, result, startDate, endDate);
+    }
     public Game findById(Long theId){
         return gameRepository.findById(theId);
     }

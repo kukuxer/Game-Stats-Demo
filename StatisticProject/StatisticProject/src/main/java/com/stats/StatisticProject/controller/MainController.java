@@ -51,7 +51,7 @@ public class MainController {
 
         if(isDate.equals("true")){
             String tempDate;
-            if(isSecondDate.equals("yes")){
+            if(isSecondDate != null){
                 tempDate = secondDate;
             }else{
                 tempDate = date;
@@ -62,10 +62,10 @@ public class MainController {
             }else if("Everything".equals(result)){
                 games = gameService.findAllByNameByDateBetween(name, date, tempDate);
             }else if("Everyone".equals(name)){
-                games = gameService.findAllByResult(result);
+                games = gameService.findAllByResultByDateBetween(result, date, tempDate);
                 everything = true;
             }else{
-                games = gameService.findAllByNameAndResult(name, result);
+                games = gameService.findAllByNameAndResultByDate(name, result, date, tempDate);
             }
         }
 
