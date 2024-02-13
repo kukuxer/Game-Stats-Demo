@@ -27,6 +27,7 @@ public class MainController {
 
     @PostMapping("/list")
     public String list(Model model, @RequestParam(value = "name", required = false) String name,
+                       @RequestParam(value = "opponent", required = false) String opponent,
                        @RequestParam(value = "winOrLose", required = false) String result,
                        @RequestParam(value = "date", required = false) String date,
                        @RequestParam(value = "isDate", required = false) String isDate,
@@ -36,7 +37,36 @@ public class MainController {
         List<Game> games = gameService.findAll();
         boolean everything = false;
 
-        if(isDate.equals("false")){
+        //with specific opponent without date
+        if(isDate.equals("false") && !opponent.equals("Everyone")){
+            if("Everything".equals(result)){
+                games = gameService.findAllBetweenPlayers(name, opponent);
+                everything = false;
+            }else {
+                games = gameService.findAllBetweenPlayersByResult(name, opponent, result);
+                everything = false;
+            }
+        }
+
+        //with specific opponent with date
+        if(isDate.equals("true") && !opponent.equals("Everyone")){
+            String tempDate;
+            if(isSecondDate != null){
+                tempDate = secondDate;
+            }else{
+                tempDate = date;
+            }
+            if("Everything".equals(result)){
+                games = gameService.findAllBetweenPlayersByDateBetween(name, opponent, date, tempDate);
+                everything = false;
+            }else{
+                games = gameService.findAllBetweenPlayersByResultByDateBetween(name, opponent, result, date, tempDate);
+                everything = false;
+            }
+        }
+
+        //without date
+        if(isDate.equals("false") && opponent.equals("Everyone")){
             if(("Everything".equals(result)) && ("Everyone".equals(name))){
                 games = gameService.findAll();
                 everything = true;
@@ -50,7 +80,8 @@ public class MainController {
             }
         }
 
-        if(isDate.equals("true")){
+        //with date
+        if(isDate.equals("true") && opponent.equals("Everyone")){
             String tempDate;
             if(isSecondDate != null){
                 tempDate = secondDate;

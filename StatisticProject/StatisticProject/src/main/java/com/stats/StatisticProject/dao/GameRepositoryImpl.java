@@ -120,6 +120,52 @@ public class GameRepositoryImpl implements GameRepository {
     }
 
     @Override
+    public List<Game> findAllBetweenPlayers(String name, String opponent) {
+        TypedQuery<Game> query = entityManager.createQuery(
+                "FROM Game WHERE person = :name AND opponent = :opponent", Game.class);
+        query.setParameter("name", name);
+        query.setParameter("opponent", opponent);
+
+        return query.getResultList();
+    }
+
+    @Override
+    public List<Game> findAllBetweenPlayersByResult(String name, String opponent, String result) {
+        TypedQuery<Game> query = entityManager.createQuery(
+                "FROM Game WHERE person = :name AND opponent = :opponent AND winOrLose = :result", Game.class);
+        query.setParameter("name", name);
+        query.setParameter("opponent", opponent);
+        query.setParameter("result", result);
+
+        return query.getResultList();
+    }
+
+    @Override
+    public List<Game> findAllBetweenPlayersByDateBetween(String name, String opponent, String startDate, String endDate) {
+        TypedQuery<Game> query = entityManager.createQuery(
+                "FROM Game WHERE opponent = :opponent AND person = :name AND date BETWEEN :startDate AND :endDate", Game.class);
+        query.setParameter("startDate", startDate);
+        query.setParameter("endDate", endDate);
+        query.setParameter("name", name);
+        query.setParameter("opponent", opponent);
+
+        return query.getResultList();
+    }
+
+    @Override
+    public List<Game> findAllBetweenPlayersByResultByDateBetween(String name, String opponent, String result, String startDate, String endDate) {
+        TypedQuery<Game> query = entityManager.createQuery(
+                "FROM Game WHERE opponent = :opponent AND person = :name AND winOrLose = :result AND date BETWEEN :startDate AND :endDate", Game.class);
+        query.setParameter("startDate", startDate);
+        query.setParameter("endDate", endDate);
+        query.setParameter("name", name);
+        query.setParameter("opponent", opponent);
+        query.setParameter("result", result);
+
+        return query.getResultList();
+    }
+
+    @Override
     public void addPlayer(Game game) {
         entityManager.persist(game);
     }

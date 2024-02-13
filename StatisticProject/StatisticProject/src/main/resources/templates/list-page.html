@@ -17,11 +17,12 @@ Result: <a th:text="${result}"></a>
     Opponent's Games: <a th:text="${opponentsScoreList}"></a>
     <br>
     All Games: <a th:text="${allScore}"></a>
-    <br>
-    Win rate by games: <a th:text="${scoreList} / ${allScore} * 100"></a>
-    <br>
-    Win rate by sets: <a th:text="${winAmount} / ${gamesAmount} * 100"></a>
 </p>
+Win rate by games: <a th:text="${scoreList} / ${allScore} * 100"></a>
+<br>
+Win rate by sets: <a th:text="${winAmount} / ${gamesAmount} * 100"></a>
+<br>
+<br>
 <p th:if="${isEverything == true}">
     All Scores: <a th:text="${scoreList}"></a>
 </p>

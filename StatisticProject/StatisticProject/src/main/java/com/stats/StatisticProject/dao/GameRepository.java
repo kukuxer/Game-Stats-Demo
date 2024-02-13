@@ -17,6 +17,10 @@ public interface GameRepository {
     List<Game> findAllByNameByDateBetween(String name, String startDate, String endDate);
     List<Game> findAllByResultByDateBetween(String result, String startDate, String endDate);
     List<Game> findAllByNameAndResultByDateBetween(String name, String result, String startDate, String endDate);
+    List<Game> findAllBetweenPlayers(String name, String opponent);
+    List<Game> findAllBetweenPlayersByResult(String name, String opponent, String result);
+    List<Game> findAllBetweenPlayersByDateBetween(String name, String opponent, String startDate, String endDate);
+    List<Game> findAllBetweenPlayersByResultByDateBetween(String name, String opponent, String result, String startDate, String endDate);
     //create
     void addPlayer(Game game);
 
