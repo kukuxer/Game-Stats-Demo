@@ -65,6 +65,32 @@ public class GameRepositoryImpl implements GameRepository {
     }
 
     @Override
+    public List<Game> findByDate(String date) {
+
+        TypedQuery<Game> query = entityManager.createQuery(
+                "FROM Game WHERE date = :date", Game.class);
+        query.setParameter("date", date);
+
+        return query.getResultList();
+    }
+
+    @Override
+    public List<Game> findByDateBetween(String startDate, String endDate) {
+
+        TypedQuery<Game> query = entityManager.createQuery(
+                "FROM Game WHERE date BETWEEN :startDate AND :endDate", Game.class);
+        query.setParameter("startDate", startDate);
+        query.setParameter("endDate", endDate);
+
+        return query.getResultList();
+    }
+
+    @Override
+    public List<Game> findAllByNameByDateBetween(String name, String startDate, String endDate) {
+        return null;
+    }
+
+    @Override
     public void addPlayer(Game game) {
         entityManager.persist(game);
     }
