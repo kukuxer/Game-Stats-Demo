@@ -52,8 +52,7 @@
         <input id="cd" type="number" th:field="${game.opponentScore}" placeholder="score">
     </p>
     <p>
-        <label for="d">Date</label>
-        <input id="d" type="date" th:field="${game.date}" placeholder="date">
+        <input id="d" type="date" th:field="${game.date}" placeholder="date" th:value="${newDate}">
     </p>
 
     <button type="submit">Lol Lmao</button>

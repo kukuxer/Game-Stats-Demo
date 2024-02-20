@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
@@ -138,7 +139,9 @@ public class MainController {
     public String showFormForAdd(Model model){
 
         Game game = new Game();
+        LocalDate defaultDate = LocalDate.of(2017, 6, 1);
 
+        model.addAttribute("newDate", defaultDate);
         model.addAttribute("game", game);
 
         return "add-form";

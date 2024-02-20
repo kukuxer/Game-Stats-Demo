@@ -11,7 +11,7 @@
 
     <select name="name">
         <option th:value="Everyone" th:text="Everyone"></option>
-        <option th:value="Bahdan" th:text="Bahdan"></option>
+        <option th:value="Bahdan" th:text="Bahdan" selected="selected"></option>
         <option th:value="Junya" th:text="Junya"></option>
         <option th:value="nzar" th:text="nzar"></option>
     </select>
@@ -32,13 +32,13 @@
     <br>
     <a>do you need date?</a>
 
-    <input type="radio" name="isDate" value="true" >
+    <input type="radio" name="isDate" value="true">
     <a>yes</a>
-    <input type="radio" name="isDate" value="false">
+    <input type="radio" name="isDate" value="false" checked="checked">
     <a>no</a>
     <input type="radio" name="isSecondDate" value="yes">
     <a>Use Second Date?</a>
-    <input type="date" name="date" placeholder="date">
+    <input type="date" name="date" placeholder="date" value="2017-06-01">
 
     <input type="date" name="secondDate" placeholder="date">
 
