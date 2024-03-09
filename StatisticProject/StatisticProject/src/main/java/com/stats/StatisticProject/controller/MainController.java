@@ -1,6 +1,7 @@
 package com.stats.StatisticProject.controller;
 
 import com.stats.StatisticProject.entity.Game;
+import com.stats.StatisticProject.service.EmailService;
 import com.stats.StatisticProject.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,15 +15,17 @@ import java.util.Objects;
 @Controller
 public class MainController {
 
+    private final EmailService emailService;
     private GameService gameService;
 
     @Autowired
-    public MainController(GameService gameService) {
+    public MainController(EmailService emailService, GameService gameService) {
+        this.emailService = emailService;
         this.gameService = gameService;
     }
 
     @GetMapping("/home")
-    public String home(Model model){
+    public String home(Model model) {
         return "home-page";
     }
 
@@ -33,71 +36,71 @@ public class MainController {
                        @RequestParam(value = "date", required = false) String date,
                        @RequestParam(value = "isDate", required = false) String isDate,
                        @RequestParam(value = "secondDate", required = false) String secondDate,
-                       @RequestParam(value = "isSecondDate", required = false) String isSecondDate){
+                       @RequestParam(value = "isSecondDate", required = false) String isSecondDate) {
 
         List<Game> games = gameService.findAll();
         boolean everything = false;
 
         //with specific opponent without date
-        if(isDate.equals("false") && !opponent.equals("Everyone")){
-            if("Everything".equals(result)){
+        if (isDate.equals("false") && !opponent.equals("Everyone")) {
+            if ("Everything".equals(result)) {
                 games = gameService.findAllBetweenPlayers(name, opponent);
                 everything = false;
-            }else {
+            } else {
                 games = gameService.findAllBetweenPlayersByResult(name, opponent, result);
                 everything = false;
             }
         }
 
         //with specific opponent with date
-        if(isDate.equals("true") && !opponent.equals("Everyone")){
+        if (isDate.equals("true") && !opponent.equals("Everyone")) {
             String tempDate;
-            if(isSecondDate != null){
+            if (isSecondDate != null) {
                 tempDate = secondDate;
-            }else{
+            } else {
                 tempDate = date;
             }
-            if("Everything".equals(result)){
+            if ("Everything".equals(result)) {
                 games = gameService.findAllBetweenPlayersByDateBetween(name, opponent, date, tempDate);
                 everything = false;
-            }else{
+            } else {
                 games = gameService.findAllBetweenPlayersByResultByDateBetween(name, opponent, result, date, tempDate);
                 everything = false;
             }
         }
 
         //without date
-        if(isDate.equals("false") && opponent.equals("Everyone")){
-            if(("Everything".equals(result)) && ("Everyone".equals(name))){
+        if (isDate.equals("false") && opponent.equals("Everyone")) {
+            if (("Everything".equals(result)) && ("Everyone".equals(name))) {
                 games = gameService.findAll();
                 everything = true;
-            }else if("Everything".equals(result)){
+            } else if ("Everything".equals(result)) {
                 games = gameService.findAllByName(name);
-            }else if("Everyone".equals(name)){
+            } else if ("Everyone".equals(name)) {
                 games = gameService.findAllByResult(result);
                 everything = true;
-            }else{
+            } else {
                 games = gameService.findAllByNameAndResult(name, result);
             }
         }
 
         //with date
-        if(isDate.equals("true") && opponent.equals("Everyone")){
+        if (isDate.equals("true") && opponent.equals("Everyone")) {
             String tempDate;
-            if(isSecondDate != null){
+            if (isSecondDate != null) {
                 tempDate = secondDate;
-            }else{
+            } else {
                 tempDate = date;
             }
-            if(("Everything".equals(result)) && ("Everyone".equals(name))){
+            if (("Everything".equals(result)) && ("Everyone".equals(name))) {
                 games = gameService.findByDateBetween(date, tempDate);
                 everything = true;
-            }else if("Everything".equals(result)){
+            } else if ("Everything".equals(result)) {
                 games = gameService.findAllByNameByDateBetween(name, date, tempDate);
-            }else if("Everyone".equals(name)){
+            } else if ("Everyone".equals(name)) {
                 games = gameService.findAllByResultByDateBetween(result, date, tempDate);
                 everything = true;
-            }else{
+            } else {
                 games = gameService.findAllByNameAndResultByDate(name, result, date, tempDate);
             }
         }
@@ -107,12 +110,12 @@ public class MainController {
         int gamesAmount = games.size();
         int winAmount = 0;
         int loseAmount = 0;
-        for(Game game : games){
+        for (Game game : games) {
             scoreList += game.getMyScore();
             opponentsScoreList += game.getOpponentScore();
-            if(Objects.equals(game.winOrLose, "W")){
+            if (Objects.equals(game.winOrLose, "W")) {
                 winAmount++;
-            }else if(Objects.equals(game.winOrLose, "L")){
+            } else if (Objects.equals(game.winOrLose, "L")) {
                 loseAmount++;
             }
         }
@@ -136,7 +139,7 @@ public class MainController {
     }
 
     @GetMapping("/showFormForAdd")
-    public String showFormForAdd(Model model){
+    public String showFormForAdd(Model model) {
 
         Game game = new Game();
         LocalDate defaultDate = LocalDate.of(2017, 6, 1);
@@ -148,33 +151,50 @@ public class MainController {
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute("game") Game game){
+    public String save(@ModelAttribute("game") Game game) {
+        boolean opponentWin = false;
 
-        if(game.getMyScore() > game.getOpponentScore()){
+        if (game.getMyScore() > game.getOpponentScore()) {
             game.setWinOrLose("W");
-        }else{
+        } else {
             game.setWinOrLose("L");
+            opponentWin = true;
         }
 
         String result = "L";
 
-        if(game.getWinOrLose().equals("W")){
+        if (game.getWinOrLose().equals("W")) {
             result = "L";
-        }else{
+        } else {
             result = "W";
         }
 
         Game opponentsGame = new Game(game.getOpponent(), game.getPerson(), result, game.getOpponentScore(), game.getMyScore(), game.getDate());
 
+        String personName = game.getPerson();
+        String opponentName = game.getOpponent();
+
         gameService.save(game);
         gameService.save(opponentsGame);
+
+        emailService.sendMailTo(emailService.getEmail(personName),
+                "You played against "+ opponentName + "\n and you  " + game.winOrLose
+        + "\n with score: " + game.getMyScore() +
+                        "\n"+ personName + " " + game.getMyScore() +" vs " + opponentName + " " + game.getOpponentScore()
+        );
+        String opponentWinOrLose = opponentWin ? "won" : "lost";
+        emailService.sendMailTo(emailService.getEmail(opponentName),
+                "You played against "+ personName + "\n and you  " + opponentWinOrLose
+                        + "\n with score: " + game.getOpponentScore() +
+                        "\n"+ personName + " " + game.getMyScore() +" vs " + opponentName + " " + game.getOpponentScore()
+        );
 
         return "redirect:/showFormForAdd";
     }
 
     //delete
     @GetMapping("/delete")
-    public String delete(@RequestParam Long gameIdForDelete){
+    public String delete(@RequestParam Long gameIdForDelete) {
 
         gameService.deleteById(gameIdForDelete);
 
