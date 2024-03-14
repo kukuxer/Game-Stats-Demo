@@ -3,6 +3,7 @@ package com.stats.StatisticProject.controller;
 import com.stats.StatisticProject.entity.Game;
 import com.stats.StatisticProject.service.EmailService;
 import com.stats.StatisticProject.service.GameService;
+import com.stats.StatisticProject.tg.TelegramBot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,11 +19,15 @@ public class MainController {
     private final EmailService emailService;
     private GameService gameService;
 
+    private TelegramBot telegramBot;
+
     @Autowired
-    public MainController(EmailService emailService, GameService gameService) {
+    public MainController(EmailService emailService, GameService gameService, TelegramBot telegramBot) {
         this.emailService = emailService;
         this.gameService = gameService;
+        this.telegramBot = telegramBot;
     }
+
 
     @GetMapping("/home")
     public String home(Model model) {
@@ -188,6 +193,8 @@ public class MainController {
                         + "\n with score: " + game.getOpponentScore() +
                         "\n"+ personName + " " + game.getMyScore() +" vs " + opponentName + " " + game.getOpponentScore()
         );
+
+//        telegramBot.sendMessageToAdmin(opponentWinOrLose);
 
         return "redirect:/showFormForAdd";
     }
