@@ -33,7 +33,7 @@ public class EmailServiceImpl implements EmailService {
             mimeMessageHelper.setTo(to);
 //            mimeMessageHelper.setCc(""); if you need...
             mimeMessageHelper.setSubject("Your tennis stats");
-            mimeMessageHelper.setText(body);
+            mimeMessageHelper.setText(body,true);
 
 //            for (int i = 0; i < file.length ; i++) {
 //                mimeMessageHelper.addAttachment(
