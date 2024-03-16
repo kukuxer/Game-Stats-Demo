@@ -181,18 +181,46 @@ public class MainController {
 
         gameService.save(game);
         gameService.save(opponentsGame);
-
         emailService.sendMailTo(emailService.getEmail(personName),
-                "You played against "+ opponentName + "\n and you  " + game.winOrLose
-        + "\n with score: " + game.getMyScore() +
-                        "\n"+ personName + " " + game.getMyScore() +" vs " + opponentName + " " + game.getOpponentScore()
-        );
+                "<html>" +
+                        "<head>" +
+                        "<style>" +
+                        "body { font-family: Arial, sans-serif; background-color: #00FF00; }" +
+                        ".container { max-width: 600px; margin: auto; padding: 20px; background-color: #fff; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,.1); }" +
+                        "h1 { color: #333; text-align: center; }" +
+                        "p { text-align: center; }" +
+                        ".result { font-weight: bold; }" +
+                        "</style>" +
+                        "</head>" +
+                        "<body>" +
+                        "<div class='container'>" +
+                        "<h1>Game Result</h1>" +
+                        "<p>You played against " + opponentName + " and you " + game.winOrLose + " the game with score: " + game.getMyScore()  + "</p>" +
+                        "<p>" + personName + " " + game.getMyScore() + " vs " + opponentName + " " + game.getOpponentScore() + "</p>" +
+                        "</div>" +
+                        "</body>" +
+                        "</html>");
+
         String opponentWinOrLose = opponentWin ? "won" : "lost";
         emailService.sendMailTo(emailService.getEmail(opponentName),
-                "You played against "+ personName + "\n and you  " + opponentWinOrLose
-                        + "\n with score: " + game.getOpponentScore() +
-                        "\n"+ personName + " " + game.getMyScore() +" vs " + opponentName + " " + game.getOpponentScore()
-        );
+                "<html>" +
+                        "<head>" +
+                        "<style>" +
+                        "body { font-family: Arial, sans-serif; background-color: #FF0000; }" +
+                        ".container { max-width: 600px; margin: auto; padding: 20px; background-color: #fff; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,.1); }" +
+                        "h1 { color: #333; text-align: center; }" +
+                        "p { text-align: center; }" +
+                        ".result { font-weight: bold; }" +
+                        "</style>" +
+                        "</head>" +
+                        "<body>" +
+                        "<div class='container'>" +
+                        "<h1>Game Result</h1>" +
+                        "<p>You played against " + personName + " and you " + opponentWinOrLose + " the game with score: " + game.getOpponentScore()  + "</p>" +
+                        "<p>" + personName + " " + game.getMyScore() + " vs " + opponentName + " " + game.getOpponentScore() + "</p>" +
+                        "</div>" +
+                        "</body>" +
+                        "</html>");
 
 //        telegramBot.sendMessageToAdmin(opponentWinOrLose);
 
